@@ -82,6 +82,9 @@ bool Server::check_auth(int userKey)
 QByteArray Server::task_is_done(int userKey, int taskNumber, int taskKey, QString answer)
 {
     bool isAnswerCorrect = check_task(taskNumber, taskKey, answer);
+    if (userKey == -1) {
+        return QByteArray((QString("task_is_done$")+QString::number(isAnswerCorrect)).toUtf8());
+    }
     QVector<QMap<QString, QString>> answer_temp = DataBase::getInstance()->db_request(
         QString("select login from Users where key = %1").arg(QString::number(userKey)));
     if (answer_temp.size() == 0) {
